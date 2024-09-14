@@ -31,7 +31,7 @@
 ├── domain                           ドメイン層
 │   ├── application                  Application Business Rules
 │   │   ├── repository               リポジトリのインターフェース
-│   │   │   └── user.go
+│   │   │   ├── user.go
 │   │   │   └── todo.go
 │   │   └── usecase                  Usecase
 │   │       ├── todo_input_port.go   Input PortのインターフェースとInput Dataの構造定義。ドメインが望む入力形式の定義
@@ -39,6 +39,7 @@
 │   │       └── todo_output_port.go  Output PortのインターフェースとOutput Dataの構造定義。。ドメインが望む出力形式の定義
 │   └── entity                       Enterprise Business Rules
 │       ├── user.go                  ユーザーのデータ構造。DDDにおける値オブジェクトやドメインサービスまで定義していいと思う。
+│       ├── admin.go                 管理者のデータ構造。DDDにおける値オブジェクトやドメインサービスまで定義していいと思う。
 │       └── todo.go                  データ構造。DDDにおける値オブジェクトやドメインサービスまで定義していいと思う。
 ├── go.mod
 ├── go.sum
@@ -47,6 +48,7 @@
 │   │   └── auth.go                  JWT認証の実装
 │   └── router                       Ginの実装。Controllerと繋げる
 │       ├── api
+│       │   ├── user.go
 │       │   └── todo.go
 │       └── router.go
 ├── interface                        Interface Adapters
