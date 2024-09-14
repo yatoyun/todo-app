@@ -34,6 +34,9 @@
 │   │   │   ├── user.go
 │   │   │   └── todo.go
 │   │   └── usecase                  Usecase
+│   │       ├── user_input_port.go   Input PortのインターフェースとInput Dataの構造定義。ドメインが望む入力形式の定義
+│   │       ├── user_interactor.go   Interactor。Input DataとRepositoryを使ってデータを取得、Output Portの実装であるPresenterに渡す
+│   │       ├── user_output_port.go  Output PortのインターフェースとOutput Dataの構造定義。ドメインが望む出力形式の定義
 │   │       ├── todo_input_port.go   Input PortのインターフェースとInput Dataの構造定義。ドメインが望む入力形式の定義
 │   │       ├── todo_interactor.go   Interactor。Input DataとRepositoryを使ってデータを取得、Output Portの実装であるPresenterに渡す
 │   │       └── todo_output_port.go  Output PortのインターフェースとOutput Dataの構造定義。。ドメインが望む出力形式の定義
