@@ -31,16 +31,20 @@
 ├── domain                           ドメイン層
 │   ├── application                  Application Business Rules
 │   │   ├── repository               リポジトリのインターフェース
+│   │   │   └── user.go
 │   │   │   └── todo.go
 │   │   └── usecase                  Usecase
 │   │       ├── todo_input_port.go   Input PortのインターフェースとInput Dataの構造定義。ドメインが望む入力形式の定義
 │   │       ├── todo_interactor.go   Interactor。Input DataとRepositoryを使ってデータを取得、Output Portの実装であるPresenterに渡す
 │   │       └── todo_output_port.go  Output PortのインターフェースとOutput Dataの構造定義。。ドメインが望む出力形式の定義
 │   └── entity                       Enterprise Business Rules
+│       ├── user.go                  ユーザーのデータ構造。DDDにおける値オブジェクトやドメインサービスまで定義していいと思う。
 │       └── todo.go                  データ構造。DDDにおける値オブジェクトやドメインサービスまで定義していいと思う。
 ├── go.mod
 ├── go.sum
 ├── infrastructure                   Frameworks & Drivers
+│   ├── middleware                   Middlewareの実装。認証や認可のミドルウェア
+│   │   └── auth.go                  JWT認証の実装
 │   └── router                       Ginの実装。Controllerと繋げる
 │       ├── api
 │       │   └── todo.go
@@ -49,17 +53,18 @@
 │   ├── controller                   Controller。データをInteractorが望むInputDataに整形して渡し、Presenterが整形したデータを表示する
 │   │   ├── context.go
 │   │   ├── error.go
+│   │   ├── user.go
 │   │   └── todo.go
 │   ├── presenter                    Presenter。Output Portの実装。OutDataを受け取ってレスポンスを整形する
 │   │   └── todo.go
 │   └── repository
 │       └── todo.go                  リポジトリの実装。Databaseを使ったデータの取得など
 ├── main.go
+├── .env                             auth0の環境変数
 └── migrations
     ├── 000001_create_todos.down.sql
     └── 000001_create_todos.up.sql
 ```
-
 
 ### reference
 https://github.com/arakawamoriyuki/go-clean-handson/blob/main/clean-architecture/readme.md
