@@ -33,7 +33,7 @@ func (i *UserInteractor) Create(ctx context.Context, user *entity.User) (err err
 	}
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-	user, err = i.Repository.Create(ctx, user)
+	err = i.Repository.Create(ctx, user)
 	return err
 }
 
@@ -101,7 +101,7 @@ func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (User
 
 func (i *UserInteractor) Update(ctx context.Context, user *entity.User) (err error) {
 	user.UpdatedAt = time.Now()
-	user, err = i.Repository.Update(ctx, user)
+	err = i.Repository.Update(ctx, user)
 	return err
 }
 
