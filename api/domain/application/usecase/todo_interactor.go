@@ -40,7 +40,7 @@ func (i *TodoInteractor) GetList(ctx context.Context) ([]TodoResponse, error) {
 	todoResponses := make([]TodoResponse, 0, len(todos))
 	for _, todo := range todos {
 		outputData := TodoOutputData{
-			Id:          todo.ID,
+			ID:          todo.ID,
 			Title:       todo.Title,
 			Description: todo.Description,
 			Completed:   todo.Completed,
@@ -56,8 +56,8 @@ func (i *TodoInteractor) GetList(ctx context.Context) ([]TodoResponse, error) {
 	return todoResponses, nil
 }
 
-func (i *TodoInteractor) GetByID(ctx context.Context, id string) (todo TodoResponse, err error) {
-	todo, err = i.Repository.GetByID(ctx, id)
+func (i *TodoInteractor) GetByID(ctx context.Context, id string) (TodoRes TodoResponse, err error) {
+	todo, err := i.Repository.GetByID(ctx, id)
 	if err != nil {
 		return TodoResponse{}, err
 	}
