@@ -64,6 +64,7 @@
 │   │   └── user.go
 │   │   └── todo.go
 │   └── repository
+│       ├── user.go                  リポジトリのインターフェース
 │       └── todo.go                  リポジトリの実装。Databaseを使ったデータの取得など
 ├── main.go
 ├── .env                             auth0の環境変数
@@ -74,3 +75,5 @@
 
 ### reference
 https://github.com/arakawamoriyuki/go-clean-handson/blob/main/clean-architecture/readme.md
+https://github.com/bxcodec/go-clean-arch/blob/master/internal/repository/mysql/article.go
+https://zenn.dev/mstn_/articles/75667657fa5aed
