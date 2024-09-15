@@ -79,7 +79,7 @@ func (i *UserInteractor) Update(ctx context.Context, user *entity.User) (err err
 	return err
 }
 
-func (i *UserInteractor) Delete(ctx context.Context, user *entity.User) (err error) {
-	err = i.Repository.Delete(ctx, user)
+func (i *UserInteractor) Delete(ctx context.Context, userID string) (err error) {
+	err = i.Repository.Delete(ctx, userID)
 	return err
 }
