@@ -61,6 +61,7 @@
 │   │   ├── user.go
 │   │   └── todo.go
 │   ├── presenter                    Presenter。Output Portの実装。OutDataを受け取ってレスポンスを整形する
+│   │   └── user.go
 │   │   └── todo.go
 │   └── repository
 │       └── todo.go                  リポジトリの実装。Databaseを使ったデータの取得など
