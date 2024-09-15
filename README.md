@@ -64,6 +64,7 @@
 │   │   └── user.go
 │   │   └── todo.go
 │   └── repository
+│       ├── user.go                  リポジトリのインターフェース
 │       └── todo.go                  リポジトリの実装。Databaseを使ったデータの取得など
 ├── main.go
 ├── .env                             auth0の環境変数
