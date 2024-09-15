@@ -3,7 +3,7 @@ package usecase
 import "time"
 
 type UserOutputData struct {
-	Id string
+	ID string
 	Name string
 	Email string
 	Auth0ID string
@@ -13,7 +13,7 @@ type UserOutputData struct {
 }
 
 type UserResponse struct {
-	Id string
+	ID string
 	Name string
 	Email string
 	Auth0ID string
