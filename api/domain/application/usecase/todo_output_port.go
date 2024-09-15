@@ -4,7 +4,7 @@ import "time"
 
 // output data <DS>
 type TodoOutputData struct {
-	Id string
+	ID string
 	Title string
 	Description string
 	Completed bool
@@ -13,7 +13,7 @@ type TodoOutputData struct {
 }
 
 type TodoResponse struct {
-	Id string
+	ID string
 	Title string
 	Description string
 	Completed bool

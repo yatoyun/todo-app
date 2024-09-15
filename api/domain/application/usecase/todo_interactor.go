@@ -56,9 +56,24 @@ func (i *TodoInteractor) GetList(ctx context.Context) ([]TodoResponse, error) {
 	return todoResponses, nil
 }
 
-func (i *TodoInteractor) GetByID(ctx context.Context, id string) (todo *entity.Todo, err error) {
+func (i *TodoInteractor) GetByID(ctx context.Context, id string) (todo TodoResponse, err error) {
 	todo, err = i.Repository.GetByID(ctx, id)
-	return todo, err
+	if err != nil {
+		return TodoResponse{}, err
+	}
+	outputData := &TodoOutputData{
+		ID:          todo.ID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Completed:   todo.Completed,
+		CreatedAt:   todo.CreatedAt,
+		UpdatedAt:   todo.UpdatedAt,
+	}
+	response, err := i.OutputPort.Convert(*outputData)
+	if err != nil {
+		return TodoResponse{}, err
+	}
+	return *response, nil
 }
 
 func (i *TodoInteractor) Update(ctx context.Context, todo *entity.Todo) (err error) {
