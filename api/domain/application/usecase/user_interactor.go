@@ -46,7 +46,7 @@ func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0, len(users))
 	for _, user := range users {
 		outputData := &UserOutputData{
-			Id: user.ID,
+			ID: user.ID,
 			Name: user.Name,
 			Email: user.Email,
 			Auth0ID: user.Auth0ID,
@@ -69,7 +69,7 @@ func (i *UserInteractor) GetByID(ctx context.Context, id string) (UserResponse, 
 		return UserResponse{}, err
 	}
 	outputData := &UserOutputData{
-		Id: user.ID,
+		ID: user.ID,
 		Name: user.Name,
 		Email: user.Email,
 		Auth0ID: user.Auth0ID,
@@ -87,7 +87,7 @@ func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (User
 		return UserResponse{}, err
 	}
 	outputData := &UserOutputData{
-		Id: user.ID,
+		ID: user.ID,
 		Name: user.Name,
 		Email: user.Email,
 		Auth0ID: user.Auth0ID,
