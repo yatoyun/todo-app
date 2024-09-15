@@ -45,8 +45,8 @@ func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
 
 	userResponses := make([]UserResponse, 0, len(users))
 	for _, user := range users {
-		outputData := UserOutputData{
-			Id: user.Id,
+		outputData := &UserOutputData{
+			Id: user.ID,
 			Name: user.Name,
 			Email: user.Email,
 			Auth0ID: user.Auth0ID,
@@ -54,7 +54,7 @@ func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		}
-		response, err := i.OutputPort.Convert(outputData)
+		response, err := i.OutputPort.Convert(*outputData)
 		if err != nil {
 			return nil, err
 		}
@@ -63,14 +63,40 @@ func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
 	return userResponses, nil
 }
 
-func (i *UserInteractor) GetByID(ctx context.Context, id string) (user *entity.User, err error) {
-	user, err = i.Repository.GetByID(ctx, id)
-	return user, err
+func (i *UserInteractor) GetByID(ctx context.Context, id string) (UserResponse, error) {
+	user, err := i.Repository.GetByID(ctx, id)
+	if err != nil {
+		return UserResponse{}, err
+	}
+	outputData := &UserOutputData{
+		Id: user.ID,
+		Name: user.Name,
+		Email: user.Email,
+		Auth0ID: user.Auth0ID,
+		Role: user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+	response, err := i.OutputPort.Convert(*outputData)
+	return *response, err
 }
 
-func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (user *entity.User, err error) {
-	user, err = i.Repository.GetByAuth0ID(ctx, auth0ID)
-	return user, err
+func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (UserResponse, error) {
+	user, err := i.Repository.GetByAuth0ID(ctx, auth0ID)
+	if err != nil {
+		return UserResponse{}, err
+	}
+	outputData := &UserOutputData{
+		Id: user.ID,
+		Name: user.Name,
+		Email: user.Email,
+		Auth0ID: user.Auth0ID,
+		Role: user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+	response, err := i.OutputPort.Convert(*outputData)
+	return *response, err
 }
 
 func (i *UserInteractor) Update(ctx context.Context, user *entity.User) (err error) {
