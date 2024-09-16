@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/yatoyun/todo-app/api/infrastructure/router"
 	"log"
-	"net/url"
 	"os"
+	"time"
 )
 
 const (
@@ -22,23 +23,40 @@ func init() {
 	}
 }
 
-func main() {
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
+func connectDB() *sqlx.DB {
+	jst, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		log.Fatalf("Failed to load location: %v", err)
+	}
+
+	dbName := os.Getenv("DB_NAME")
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
-	dbName := os.Getenv("DB_NAME")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
 
-	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", url.QueryEscape(dbUser), url.QueryEscape(dbPass), dbHost, dbPort, dbName)
-	val := url.Values{}
-	val.Add("parseTime", "true")
-	val.Add("loc", "Local")
-	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
-	dbConn, err := sqlx.Open("mysql", dsn)
+	c := mysql.Config{
+		DBName:    dbName,
+		User:      dbUser,
+		Passwd:    dbPass,
+		Addr:      fmt.Sprintf("%s:%s", dbHost, dbPort),
+		Net:       "tcp",
+		ParseTime: true,
+		Collation: "utf8mb4_unicode_ci",
+		Loc:       jst,
+	}
+
+	db, err := sqlx.Open("mysql", c.FormatDSN())
 	if err != nil {
 		log.Fatalf("Failed to open connection to database: %v", err)
 	}
-	err = dbConn.Ping()
+	return db
+}
+
+func main() {
+	// Connect to the database
+	dbConn := connectDB()
+	err := dbConn.Ping()
 	if err != nil {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
@@ -52,7 +70,7 @@ func main() {
 
 	// Start the server
 	r := router.NewRouter(dbConn)
-	address := os.Getenv("ADDRESS")
+	address := os.Getenv("SERVER_ADDRESS")
 	if address == "" {
 		address = defaultAddress
 	}
