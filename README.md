@@ -74,6 +74,6 @@
 ```
 
 ### reference
-https://github.com/arakawamoriyuki/go-clean-handson/blob/main/clean-architecture/readme.md
-https://github.com/bxcodec/go-clean-arch/blob/master/internal/repository/mysql/article.go
-https://zenn.dev/mstn_/articles/75667657fa5aed
+https://github.com/arakawamoriyuki/go-clean-handson/blob/main/clean-architecture/readme.md  
+https://github.com/bxcodec/go-clean-arch/blob/master/internal/repository/mysql/article.go  
+https://zenn.dev/mstn_/articles/75667657fa5aed  
