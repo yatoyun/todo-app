@@ -26,7 +26,7 @@ func (c *UserController) isRequestValidUser(m *entity.User) (bool, error) {
 	return true, nil
 }
 
-func (uc *UserController) Create(c *gin.Context) {
+func (uc *UserController) CreateUser(c *gin.Context) {
 	var user entity.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		handleError(c, err)
