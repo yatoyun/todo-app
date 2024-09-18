@@ -26,7 +26,7 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 				{"GET", "", todoController.GetTodos},
 				{"GET", "/:id", todoController.GetTodoByID},
 				{"POST", "", todoController.CreateTodo},
-				{"POST", "", todoController.UpdateTodo},
+				{"POST", "/update", todoController.UpdateTodo},
 				{"DELETE", "/:id", todoController.DeleteTodo},
 			})
 		}
@@ -35,9 +35,9 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 			RegisterRoutes(usersGroup, []Route{
 				{"GET", "", userController.GetUsers},
 				{"GET", "/:id", userController.GetUserByID},
-				{"GET", "/:auth0_id", userController.GetUserByAuth0ID}, // 開発用
+				{"GET", "/auth0/:auth0_id", userController.GetUserByAuth0ID}, // 開発用
 				{"POST", "", userController.CreateUser},
-				{"POST", "", userController.UpdateUser},
+				{"POST", "/update", userController.UpdateUser},
 				{"DELETE", "/:id", userController.DeleteUser},
 			})
 		}
