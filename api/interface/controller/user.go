@@ -26,6 +26,15 @@ func (c *UserController) isRequestValidUser(m *entity.User) (bool, error) {
 	return true, nil
 }
 
+// CreateUser godoc
+// @Summary userを作成する
+// @tags CreateUser
+// @Description userを作成する
+// @Accept json
+// @Produce json
+// @Param user body entity.User true "user"
+// @Success 201 {object} entity.User
+// @Router /users [post]
 func (uc *UserController) CreateUser(c *gin.Context) {
 	var user entity.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -47,6 +56,13 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
+// GetUsers godoc
+// @Summary user一覧を取得する
+// @tags GetUsers
+// @Description user一覧を取得する
+// @Produce json
+// @Success 200 {array} entity.User
+// @Router /users [get]
 func (uc *UserController) GetUsers(c *gin.Context) {
 	context := c.Request.Context()
 	users, err := uc.InputPort.GetList(context)
@@ -57,6 +73,14 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// GetUserByID godoc
+// @Summary userをIDで取得する
+// @tags GetUserByID
+// @Description userをIDで取得する
+// @Produce json
+// @Param id path string true "ID"
+// @Success 200 {object} entity.User
+// @Router /users/{id} [get]
 func (uc *UserController) GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -69,6 +93,14 @@ func (uc *UserController) GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// GetUserByAuth0ID godoc
+// @Summary userをAuth0IDで取得する
+// @tags GetUserByAuth0ID
+// @Description userをAuth0IDで取得する
+// @Produce json
+// @Param auth0_id path string true "Auth0ID"
+// @Success 200 {object} entity.User
+// @Router /users/auth0/{auth0_id} [get]
 func (uc *UserController) GetUserByAuth0ID(c *gin.Context) {
 	auth0ID := c.Param("auth0_id")
 
@@ -81,6 +113,14 @@ func (uc *UserController) GetUserByAuth0ID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// UpdateUser godoc
+// @Summary userを更新する
+// @tags UpdateUser
+// @Description userを更新する
+// @Accept json
+// @Produce json
+// @Param user body entity.User true "user"
+// @Router /users/update/ [post]
 func (uc *UserController) UpdateUser(c *gin.Context) {
 	var user entity.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -102,6 +142,13 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// DeleteUser godoc
+// @Summary userを削除する
+// @tags DeleteUser
+// @Description userを削除する
+// @Param id path string true "ID"
+// @Success 200 {string} string "User deleted successfully"
+// @Router /users/delete/{id} [delete]
 func (uc *UserController) DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 

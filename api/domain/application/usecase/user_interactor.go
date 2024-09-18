@@ -24,10 +24,7 @@ func NewUserInteractor(
 }
 
 func (i *UserInteractor) Create(ctx context.Context, user *entity.User) (err error) {
-	existingUser, err := i.Repository.GetByAuth0ID(ctx, user.Auth0ID)
-	if err != nil {
-		return err
-	}
+	existingUser, _ := i.Repository.GetByAuth0ID(ctx, user.Auth0ID)
 	if existingUser != nil {
 		return entity.ErrConflict
 	}
@@ -46,11 +43,11 @@ func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
 	userResponses := make([]UserResponse, 0, len(users))
 	for _, user := range users {
 		outputData := &UserOutputData{
-			ID: user.ID,
-			Name: user.Name,
-			Email: user.Email,
-			Auth0ID: user.Auth0ID,
-			Role: user.Role,
+			ID:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			Auth0ID:   user.Auth0ID,
+			Role:      user.Role,
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		}
@@ -69,11 +66,11 @@ func (i *UserInteractor) GetByID(ctx context.Context, id string) (UserResponse, 
 		return UserResponse{}, err
 	}
 	outputData := &UserOutputData{
-		ID: user.ID,
-		Name: user.Name,
-		Email: user.Email,
-		Auth0ID: user.Auth0ID,
-		Role: user.Role,
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Auth0ID:   user.Auth0ID,
+		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
@@ -87,11 +84,11 @@ func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (User
 		return UserResponse{}, err
 	}
 	outputData := &UserOutputData{
-		ID: user.ID,
-		Name: user.Name,
-		Email: user.Email,
-		Auth0ID: user.Auth0ID,
-		Role: user.Role,
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Auth0ID:   user.Auth0ID,
+		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}

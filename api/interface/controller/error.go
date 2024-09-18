@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ type ResponseError struct {
 }
 
 func handleError(ctx *gin.Context, err error) {
+	slog.Error("error", err.Error())
 	ctx.AbortWithStatusJSON(getStatusCode(err), ResponseError{Message: err.Error()})
 }
 

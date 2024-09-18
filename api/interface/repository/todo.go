@@ -21,16 +21,16 @@ func NewTodoRepository(conn *sqlx.DB) repository.TodoRepositoryInterface {
 }
 
 func (r *TodoRepository) fetch(ctx context.Context, query string, args ...interface{}) (result []*entity.Todo, err error) {
-    err = r.Conn.SelectContext(ctx, &result, query, args...)
-    if err != nil {
-        slog.Error("Todo fetch query", slog.String("error", err.Error()))
-        return nil, err
-    }
-    return result, nil
+	err = r.Conn.SelectContext(ctx, &result, query, args...)
+	if err != nil {
+		slog.Error("Todo fetch query", slog.String("error", err.Error()))
+		return nil, err
+	}
+	return result, nil
 }
 
 func (r *TodoRepository) Create(ctx context.Context, todo *entity.Todo) (err error) {
-	query := `INSERT INTO todo (title, description, completed, created_at, updated_at) VALUES (?, ?, ?, ?, ?)`
+	query := `INSERT INTO todo (id, title, description, completed, user_id, created_at, updated_at) VALUES (:id, :title, :description, :completed, :user_id, :created_at, :updated_at)`
 
 	err = withTransaction(ctx, r.Conn, func(tx *sqlx.Tx) error {
 		res, err := tx.NamedExecContext(ctx, query, todo)

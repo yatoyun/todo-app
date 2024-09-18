@@ -1,0 +1,226 @@
+basePath: /api/v1
+definitions:
+  entity.Todo:
+    properties:
+      completed:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  entity.User:
+    properties:
+      auth0_id:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        description: UUIDを想定
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  description: This is a recommend_swaggo server
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Recommend Swaggo API
+  version: "1.0"
+paths:
+  /todos:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Todo'
+            type: array
+      summary: todo一覧を取得
+      tags:
+      - GetTodos
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Todo
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Todo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Todo'
+      summary: todoを作成
+      tags:
+      - CreateTodo
+  /todos/{id}:
+    delete:
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: todoを削除
+      tags:
+      - DeleteTodo
+  /todos/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Todo
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Todo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Todo'
+      summary: todoを更新
+      tags:
+      - UpdateTodo
+  /users:
+    get:
+      description: user一覧を取得する
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.User'
+            type: array
+      summary: user一覧を取得する
+      tags:
+      - GetUsers
+    post:
+      consumes:
+      - application/json
+      description: userを作成する
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.User'
+      summary: userを作成する
+      tags:
+      - CreateUser
+  /users/{id}:
+    get:
+      description: userをIDで取得する
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+      summary: userをIDで取得する
+      tags:
+      - GetUserByID
+  /users/auth0/{auth0_id}:
+    get:
+      description: userをAuth0IDで取得する
+      parameters:
+      - description: Auth0ID
+        in: path
+        name: auth0_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+      summary: userをAuth0IDで取得する
+      tags:
+      - GetUserByAuth0ID
+  /users/delete/{id}:
+    delete:
+      description: userを削除する
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: User deleted successfully
+          schema:
+            type: string
+      summary: userを削除する
+      tags:
+      - DeleteUser
+  /users/update/{id}:
+    post:
+      consumes:
+      - application/json
+      description: userを更新する
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: userを更新する
+      tags:
+      - UpdateUser
+swagger: "2.0"
