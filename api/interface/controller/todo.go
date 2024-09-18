@@ -17,7 +17,7 @@ type TodoController struct {
 }
 
 func NewTodoController(inputPort usecase.TodoInputPortInterface) *TodoController {
-	return &TodoController{InputPort: inputPort}
+	return &TodoController{InputPort: inputPort, Validator: validator.New()}
 }
 
 // isRequestValidTodo リクエストバリデーション
@@ -29,6 +29,14 @@ func (c *TodoController) isRequestValidTodo(m *entity.Todo) (bool, error) {
 	return true, nil
 }
 
+// CreateTodo godoc
+// @Summary todoを作成
+// @Tags CreateTodo
+// @Accept json
+// @Produce json
+// @Param request body entity.Todo true "Todo"
+// @Success 201 {object} entity.Todo
+// @Router /todos [post]
 func (c *TodoController) CreateTodo(ctx *gin.Context) {
 	var todo entity.Todo
 	if err := ctx.ShouldBindJSON(&todo); err != nil {
@@ -50,6 +58,12 @@ func (c *TodoController) CreateTodo(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, todo)
 }
 
+// GetTodos godoc
+// @Summary todo一覧を取得
+// @Tags GetTodos
+// @Produce json
+// @Success 200 {array} entity.Todo
+// @Router /todos [get]
 func (c *TodoController) GetTodos(ctx *gin.Context) {
 	context := ctx.Request.Context()
 	todos, err := c.InputPort.GetList(context)
@@ -60,6 +74,12 @@ func (c *TodoController) GetTodos(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, todos)
 }
 
+// GetTodoByID godoc
+// @Summary todoを取得
+// @Tags GetTodoByID
+// @Produce json
+// @Param id path string true "Todo ID"
+// @Success 200 {object} entity.Todo
 func (c *TodoController) GetTodoByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	context := ctx.Request.Context()
@@ -71,6 +91,14 @@ func (c *TodoController) GetTodoByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, todo)
 }
 
+// UpdateTodo godoc
+// @Summary todoを更新
+// @Tags UpdateTodo
+// @Accept json
+// @Produce json
+// @Param request body entity.Todo true "Todo"
+// @Success 200 {object} entity.Todo
+// @Router /todos/update [post]
 func (c *TodoController) UpdateTodo(ctx *gin.Context) {
 	var todo entity.Todo
 	if err := ctx.ShouldBindJSON(&todo); err != nil {
@@ -91,6 +119,12 @@ func (c *TodoController) UpdateTodo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, todo)
 }
 
+// DeleteTodo godoc
+// @Summary todoを削除
+// @Tags DeleteTodo
+// @Param id path string true "Todo ID"
+// @Success 204
+// @Router /todos/{id} [delete]
 func (c *TodoController) DeleteTodo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	context := ctx.Request.Context()
