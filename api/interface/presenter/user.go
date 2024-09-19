@@ -14,7 +14,6 @@ func (p *UserPresenter) Convert(outputData usecase.UserOutputData) (*usecase.Use
 		ID:        outputData.ID,
 		Name:      outputData.Name,
 		Email:     outputData.Email,
-		Auth0ID:   outputData.Auth0ID,
 		Role:      outputData.Role,
 		CreatedAt: outputData.CreatedAt,
 		UpdatedAt: outputData.UpdatedAt,

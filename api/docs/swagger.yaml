@@ -17,22 +17,87 @@ definitions:
       user_id:
         type: string
     type: object
-  entity.User:
+  usecase.CreateTodoRequest:
+    properties:
+      completed:
+        type: boolean
+      description:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: string
+    required:
+    - completed
+    - description
+    - title
+    - user_id
+    type: object
+  usecase.CreateUserRequest:
     properties:
       auth0_id:
         type: string
-      created_at:
-        type: string
       email:
         type: string
+      name:
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
+    required:
+    - auth0_id
+    - email
+    - name
+    - role
+    type: object
+  usecase.TodoResponse:
+    properties:
+      completed:
+        type: boolean
+      createdAt:
+        type: string
+      description:
+        type: string
       id:
-        description: UUIDを想定
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  usecase.UpdateTodoRequest:
+    properties:
+      completed:
+        type: boolean
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  usecase.UpdateUserRequest:
+    properties:
+      email:
         type: string
       name:
         type: string
       role:
         type: string
-      updated_at:
+    type: object
+  usecase.UserResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      updatedAt:
         type: string
     type: object
 host: localhost:9090
@@ -54,7 +119,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Todo'
+              $ref: '#/definitions/usecase.TodoResponse'
             type: array
       summary: todo一覧を取得
       tags:
@@ -68,14 +133,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.Todo'
+          $ref: '#/definitions/usecase.CreateTodoRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.Todo'
+            $ref: '#/definitions/usecase.TodoResponse'
       summary: todoを作成
       tags:
       - CreateTodo
@@ -93,17 +158,13 @@ paths:
       summary: todoを削除
       tags:
       - DeleteTodo
-  /todos/update:
-    post:
-      consumes:
-      - application/json
+    get:
       parameters:
-      - description: Todo
-        in: body
-        name: request
+      - description: Todo ID
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/entity.Todo'
+        type: string
       produces:
       - application/json
       responses:
@@ -111,6 +172,31 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entity.Todo'
+      summary: todoを取得
+      tags:
+      - GetTodoByID
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Todo
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecase.UpdateTodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.TodoResponse'
       summary: todoを更新
       tags:
       - UpdateTodo
@@ -124,7 +210,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.User'
+              $ref: '#/definitions/usecase.UserResponse'
             type: array
       summary: user一覧を取得する
       tags:
@@ -139,56 +225,18 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/entity.User'
+          $ref: '#/definitions/usecase.CreateUserRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.User'
+            $ref: '#/definitions/usecase.UserResponse'
       summary: userを作成する
       tags:
       - CreateUser
   /users/{id}:
-    get:
-      description: userをIDで取得する
-      parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.User'
-      summary: userをIDで取得する
-      tags:
-      - GetUserByID
-  /users/auth0/{auth0_id}:
-    get:
-      description: userをAuth0IDで取得する
-      parameters:
-      - description: Auth0ID
-        in: path
-        name: auth0_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.User'
-      summary: userをAuth0IDで取得する
-      tags:
-      - GetUserByAuth0ID
-  /users/delete/{id}:
     delete:
       description: userを削除する
       parameters:
@@ -205,22 +253,63 @@ paths:
       summary: userを削除する
       tags:
       - DeleteUser
-  /users/update/{id}:
-    post:
+    get:
+      description: userをIDで取得する
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.UserResponse'
+      summary: userをIDで取得する
+      tags:
+      - GetUserByID
+    put:
       consumes:
       - application/json
       description: userを更新する
       parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       - description: user
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/entity.User'
+          $ref: '#/definitions/usecase.UpdateUserRequest'
       produces:
       - application/json
       responses: {}
       summary: userを更新する
       tags:
       - UpdateUser
+  /users/auth0/{auth0_id}:
+    get:
+      description: userをAuth0IDで取得する
+      parameters:
+      - description: Auth0ID
+        in: path
+        name: auth0_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.UserResponse'
+      summary: userをAuth0IDで取得する
+      tags:
+      - GetUserByAuth0ID
 swagger: "2.0"

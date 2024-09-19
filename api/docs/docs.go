@@ -34,7 +34,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Todo"
+                                "$ref": "#/definitions/usecase.TodoResponse"
                             }
                         }
                     }
@@ -58,7 +58,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.Todo"
+                            "$ref": "#/definitions/usecase.CreateTodoRequest"
                         }
                     }
                 ],
@@ -66,14 +66,40 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.Todo"
+                            "$ref": "#/definitions/usecase.TodoResponse"
                         }
                     }
                 }
             }
         },
-        "/todos/update": {
-            "post": {
+        "/todos/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetTodoByID"
+                ],
+                "summary": "todoを取得",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Todo ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Todo"
+                        }
+                    }
+                }
+            },
+            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -86,12 +112,19 @@ const docTemplate = `{
                 "summary": "todoを更新",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Todo ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Todo",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.Todo"
+                            "$ref": "#/definitions/usecase.UpdateTodoRequest"
                         }
                     }
                 ],
@@ -99,13 +132,11 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Todo"
+                            "$ref": "#/definitions/usecase.TodoResponse"
                         }
                     }
                 }
-            }
-        },
-        "/todos/{id}": {
+            },
             "delete": {
                 "tags": [
                     "DeleteTodo"
@@ -143,7 +174,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.User"
+                                "$ref": "#/definitions/usecase.UserResponse"
                             }
                         }
                     }
@@ -168,7 +199,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.CreateUserRequest"
                         }
                     }
                 ],
@@ -176,7 +207,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
                         }
                     }
                 }
@@ -205,63 +236,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
                         }
                     }
                 }
-            }
-        },
-        "/users/delete/{id}": {
-            "delete": {
-                "description": "userを削除する",
-                "tags": [
-                    "DeleteUser"
-                ],
-                "summary": "userを削除する",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User deleted successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/update/{id}": {
-            "post": {
-                "description": "userを更新する",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UpdateUser"
-                ],
-                "summary": "userを更新する",
-                "parameters": [
-                    {
-                        "description": "user",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.User"
-                        }
-                    }
-                ],
-                "responses": {}
             }
         },
         "/users/{id}": {
@@ -287,7 +265,63 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "userを更新する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateUser"
+                ],
+                "summary": "userを更新する",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecase.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "userを削除する",
+                "tags": [
+                    "DeleteUser"
+                ],
+                "summary": "userを削除する",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -321,20 +355,117 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.User": {
+        "usecase.CreateTodoRequest": {
             "type": "object",
+            "required": [
+                "completed",
+                "description",
+                "title",
+                "user_id"
+            ],
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "auth0_id",
+                "email",
+                "name",
+                "role"
+            ],
             "properties": {
                 "auth0_id": {
                     "type": "string"
                 },
-                "created_at": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "user"
+                    ]
+                }
+            }
+        },
+        "usecase.TodoResponse": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.UpdateTodoRequest": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.UpdateUserRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.UserResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
                 "id": {
-                    "description": "UUIDを想定",
                     "type": "string"
                 },
                 "name": {
@@ -343,7 +474,7 @@ const docTemplate = `{
                 "role": {
                     "type": "string"
                 },
-                "updated_at": {
+                "updatedAt": {
                     "type": "string"
                 }
             }
