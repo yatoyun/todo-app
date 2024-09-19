@@ -37,7 +37,7 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 				{"GET", "/:id", userController.GetUserByID},
 				{"GET", "/auth0/:auth0_id", userController.GetUserByAuth0ID}, // 開発用
 				{"POST", "", userController.CreateUser},
-				{"POST", "/update", userController.UpdateUser},
+				{"PUT", "/:id", userController.UpdateUser},
 				{"DELETE", "/:id", userController.DeleteUser},
 			})
 		}
