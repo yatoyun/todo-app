@@ -112,9 +112,10 @@ func (uc *UserController) GetUserByAuth0ID(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param user body usecase.UpdateUserRequest true "user"
-// @Router /users/update/ [post]
+// @Router /users/{id} [put]
 func (uc *UserController) UpdateUser(c *gin.Context) {
 	var user usecase.UpdateUserRequest
+	id := c.Param("id")
 	if err := c.ShouldBindJSON(&user); err != nil {
 		handleError(c, err)
 		return
@@ -126,7 +127,7 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 	}
 
 	context := c.Request.Context()
-	err := uc.InputPort.Update(context, user)
+	err := uc.InputPort.Update(context, id, user)
 	if err != nil {
 		handleError(c, err)
 		return
