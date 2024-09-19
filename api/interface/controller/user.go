@@ -133,7 +133,7 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
 // DeleteUser godoc
