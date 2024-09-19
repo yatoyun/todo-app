@@ -18,10 +18,10 @@ type UpdateUserRequest struct {
 }
 
 type UserInputPortInterface interface {
-	Create(ctx context.Context, req CreateUserRequest) (UserResponse, error)
-	GetByID(ctx context.Context, id string) (UserResponse, error)
-	GetList(ctx context.Context) ([]UserResponse, error)
-	GetByAuth0ID(ctx context.Context, auth0ID string) (UserResponse, error)
-	Update(ctx context.Context, req UpdateUserRequest) error
+	Create(ctx context.Context, req CreateUserRequest) (*UserResponse, error)
+	GetByID(ctx context.Context, id string) (*UserResponse, error)
+	GetList(ctx context.Context) ([]*UserResponse, error)
+	GetByAuth0ID(ctx context.Context, auth0ID string) (*UserResponse, error)
+	Update(ctx context.Context, id string, req UpdateUserRequest) error
 	Delete(ctx context.Context, id string) error
 }
