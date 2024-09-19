@@ -32,7 +32,7 @@ func (i *TodoInteractor) Create(ctx context.Context, req CreateTodoRequest) (res
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-	todo, err = i.Repository.Create(ctx, todo)
+	err = i.Repository.Create(ctx, todo)
 	if err != nil {
 		return nil, err
 	}
