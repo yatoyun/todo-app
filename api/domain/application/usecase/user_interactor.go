@@ -37,7 +37,10 @@ func (i *UserInteractor) Create(ctx context.Context, req CreateUserRequest) (res
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	user, err = i.Repository.Create(ctx, user)
+	err = i.Repository.Create(ctx, user)
+	if err != nil {
+		return nil, err
+	}
 	response, err = i.convertToUserResponse(user)
 	return response, err
 }
