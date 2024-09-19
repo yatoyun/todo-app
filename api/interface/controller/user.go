@@ -141,7 +141,7 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 // @Description userを削除する
 // @Param id path string true "ID"
 // @Success 200 {string} string "User deleted successfully"
-// @Router /users/delete/{id} [delete]
+// @Router /users/{id} [delete]
 func (uc *UserController) DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 
