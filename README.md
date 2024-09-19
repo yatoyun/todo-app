@@ -60,6 +60,12 @@
 │   │   ├── error.go
 │   │   ├── user.go
 │   │   └── todo.go
+│   ├── dto                          Data Transfer Objects
+│   │   └── user.go
+│   │   └── todo.go
+│   ├── converter                    データの変換。
+│   │   └── user.go
+│   │   └── todo.go
 │   ├── presenter                    Presenter。Output Portの実装。OutDataを受け取ってレスポンスを整形する
 │   │   └── user.go
 │   │   └── todo.go
