@@ -111,6 +111,7 @@ func (uc *UserController) GetUserByAuth0ID(c *gin.Context) {
 // @Description userを更新する
 // @Accept json
 // @Produce json
+// @Param id path string true "ID"
 // @Param user body usecase.UpdateUserRequest true "user"
 // @Router /users/{id} [put]
 func (uc *UserController) UpdateUser(c *gin.Context) {
