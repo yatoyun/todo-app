@@ -29,6 +29,7 @@ func (i *TodoInteractor) Create(ctx context.Context, req CreateTodoRequest) (res
 		Title:       req.Title,
 		Description: req.Description,
 		Completed:   req.Completed,
+		UserID:      req.UserID,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}

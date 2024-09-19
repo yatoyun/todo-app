@@ -6,7 +6,7 @@ import (
 
 type CreateTodoRequest struct {
 	Title       string `json:"title" validate:"required"`
-	Description string `json:"description"`
+	Description string `json:"description" validate:"required"`
 	Completed   bool   `json:"completed"`
 	UserID      string `json:"user_id" validate:"required"`
 }

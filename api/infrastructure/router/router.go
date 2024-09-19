@@ -26,7 +26,7 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 				{"GET", "", todoController.GetTodos},
 				{"GET", "/:id", todoController.GetTodoByID},
 				{"POST", "", todoController.CreateTodo},
-				{"PUT", "/", todoController.UpdateTodo},
+				{"PUT", "/:id", todoController.UpdateTodo},
 				{"DELETE", "/:id", todoController.DeleteTodo},
 			})
 		}
