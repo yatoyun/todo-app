@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/yatoyun/todo-app/api/domain/entity"
 )
 
@@ -15,8 +15,14 @@ type ResponseError struct {
 }
 
 func handleError(ctx *gin.Context, err error) {
-	slog.Error("error", err.Error())
-	ctx.AbortWithStatusJSON(getStatusCode(err), ResponseError{Message: err.Error()})
+	// Log the error message with more details
+	slog.Error("An error occurred", slog.String("error", err.Error()))
+
+	// Get the appropriate HTTP status code for the error
+	statusCode := getStatusCode(err)
+
+	// Send the error response with the status code and message
+	ctx.AbortWithStatusJSON(statusCode, ResponseError{Message: err.Error(), Code: statusCode})
 }
 
 func getStatusCode(err error) int {
