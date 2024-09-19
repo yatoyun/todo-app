@@ -143,7 +143,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.User"
+                                "$ref": "#/definitions/usecase.UserResponse"
                             }
                         }
                     }
@@ -168,7 +168,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.CreateUserRequest"
                         }
                     }
                 ],
@@ -176,7 +176,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
                         }
                     }
                 }
@@ -205,63 +205,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
                         }
                     }
                 }
-            }
-        },
-        "/users/delete/{id}": {
-            "delete": {
-                "description": "userを削除する",
-                "tags": [
-                    "DeleteUser"
-                ],
-                "summary": "userを削除する",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User deleted successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/update/{id}": {
-            "post": {
-                "description": "userを更新する",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "UpdateUser"
-                ],
-                "summary": "userを更新する",
-                "parameters": [
-                    {
-                        "description": "user",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.User"
-                        }
-                    }
-                ],
-                "responses": {}
             }
         },
         "/users/{id}": {
@@ -287,7 +234,56 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.User"
+                            "$ref": "#/definitions/usecase.UserResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "userを更新する",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateUser"
+                ],
+                "summary": "userを更新する",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecase.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "userを削除する",
+                "tags": [
+                    "DeleteUser"
+                ],
+                "summary": "userを削除する",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -321,20 +317,57 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.User": {
+        "usecase.CreateUserRequest": {
             "type": "object",
+            "required": [
+                "auth0_id",
+                "email",
+                "name",
+                "role"
+            ],
             "properties": {
                 "auth0_id": {
                     "type": "string"
                 },
-                "created_at": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "user"
+                    ]
+                }
+            }
+        },
+        "usecase.UpdateUserRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.UserResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
                 "id": {
-                    "description": "UUIDを想定",
                     "type": "string"
                 },
                 "name": {
@@ -343,7 +376,7 @@ const docTemplate = `{
                 "role": {
                     "type": "string"
                 },
-                "updated_at": {
+                "updatedAt": {
                     "type": "string"
                 }
             }

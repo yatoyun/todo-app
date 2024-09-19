@@ -17,22 +17,47 @@ definitions:
       user_id:
         type: string
     type: object
-  entity.User:
+  usecase.CreateUserRequest:
     properties:
       auth0_id:
         type: string
-      created_at:
-        type: string
       email:
         type: string
-      id:
-        description: UUIDを想定
+      name:
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
+    required:
+    - auth0_id
+    - email
+    - name
+    - role
+    type: object
+  usecase.UpdateUserRequest:
+    properties:
+      email:
         type: string
       name:
         type: string
       role:
         type: string
-      updated_at:
+    type: object
+  usecase.UserResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      updatedAt:
         type: string
     type: object
 host: localhost:9090
@@ -124,7 +149,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.User'
+              $ref: '#/definitions/usecase.UserResponse'
             type: array
       summary: user一覧を取得する
       tags:
@@ -139,56 +164,18 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/entity.User'
+          $ref: '#/definitions/usecase.CreateUserRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.User'
+            $ref: '#/definitions/usecase.UserResponse'
       summary: userを作成する
       tags:
       - CreateUser
   /users/{id}:
-    get:
-      description: userをIDで取得する
-      parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.User'
-      summary: userをIDで取得する
-      tags:
-      - GetUserByID
-  /users/auth0/{auth0_id}:
-    get:
-      description: userをAuth0IDで取得する
-      parameters:
-      - description: Auth0ID
-        in: path
-        name: auth0_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.User'
-      summary: userをAuth0IDで取得する
-      tags:
-      - GetUserByAuth0ID
-  /users/delete/{id}:
     delete:
       description: userを削除する
       parameters:
@@ -205,8 +192,25 @@ paths:
       summary: userを削除する
       tags:
       - DeleteUser
-  /users/update/{id}:
-    post:
+    get:
+      description: userをIDで取得する
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.UserResponse'
+      summary: userをIDで取得する
+      tags:
+      - GetUserByID
+    put:
       consumes:
       - application/json
       description: userを更新する
@@ -216,11 +220,30 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/entity.User'
+          $ref: '#/definitions/usecase.UpdateUserRequest'
       produces:
       - application/json
       responses: {}
       summary: userを更新する
       tags:
       - UpdateUser
+  /users/auth0/{auth0_id}:
+    get:
+      description: userをAuth0IDで取得する
+      parameters:
+      - description: Auth0ID
+        in: path
+        name: auth0_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.UserResponse'
+      summary: userをAuth0IDで取得する
+      tags:
+      - GetUserByAuth0ID
 swagger: "2.0"
