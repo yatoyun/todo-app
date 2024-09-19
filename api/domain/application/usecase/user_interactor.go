@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/yatoyun/todo-app/api/domain/application/repository"
 	"github.com/yatoyun/todo-app/api/domain/entity"
+	"time"
 )
 
 type UserInteractor struct {
@@ -21,78 +23,69 @@ func NewUserInteractor(
 	}
 }
 
-func (i *UserInteractor) Create(ctx context.Context, user *entity.User) (err error) {
-	existingUser, _ := i.Repository.GetByAuth0ID(ctx, user.Auth0ID)
+func (i *UserInteractor) Create(ctx context.Context, req CreateUserRequest) (response *UserResponse, err error) {
+	existingUser, _ := i.Repository.GetByAuth0ID(ctx, req.Auth0ID)
 	if existingUser != nil {
-		return entity.ErrConflict
+		return nil, entity.ErrConflict
 	}
-	err = i.Repository.Create(ctx, user)
-	return err
+	user := &entity.User{
+		ID:        uuid.NewString(),
+		Name:      req.Name,
+		Email:     req.Email,
+		Auth0ID:   req.Auth0ID,
+		Role:      req.Role,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+	user, err = i.Repository.Create(ctx, user)
+	response, err = i.convertToUserResponse(user)
+	return response, err
 }
 
-func (i *UserInteractor) GetList(ctx context.Context) ([]UserResponse, error) {
+func (i *UserInteractor) GetList(ctx context.Context) ([]*UserResponse, error) {
 	users, err := i.Repository.GetList(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userResponses := make([]UserResponse, 0, len(users))
+	userResponses := make([]*UserResponse, 0, len(users))
 	for _, user := range users {
-		outputData := &UserOutputData{
-			ID:        user.ID,
-			Name:      user.Name,
-			Email:     user.Email,
-			Auth0ID:   user.Auth0ID,
-			Role:      user.Role,
-			CreatedAt: user.CreatedAt,
-			UpdatedAt: user.UpdatedAt,
-		}
-		response, err := i.OutputPort.Convert(*outputData)
+		response, err := i.convertToUserResponse(user)
 		if err != nil {
 			return nil, err
 		}
-		userResponses = append(userResponses, *response)
+		userResponses = append(userResponses, response)
 	}
 	return userResponses, nil
 }
 
-func (i *UserInteractor) GetByID(ctx context.Context, id string) (UserResponse, error) {
+func (i *UserInteractor) GetByID(ctx context.Context, id string) (*UserResponse, error) {
 	user, err := i.Repository.GetByID(ctx, id)
 	if err != nil {
-		return UserResponse{}, err
+		return nil, err
 	}
-	outputData := &UserOutputData{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		Auth0ID:   user.Auth0ID,
-		Role:      user.Role,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}
-	response, err := i.OutputPort.Convert(*outputData)
-	return *response, err
+	response, err := i.convertToUserResponse(user)
+	return response, err
 }
 
-func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (UserResponse, error) {
+func (i *UserInteractor) GetByAuth0ID(ctx context.Context, auth0ID string) (*UserResponse, error) {
 	user, err := i.Repository.GetByAuth0ID(ctx, auth0ID)
 	if err != nil {
-		return UserResponse{}, err
+		return nil, err
 	}
-	outputData := &UserOutputData{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		Auth0ID:   user.Auth0ID,
-		Role:      user.Role,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}
-	response, err := i.OutputPort.Convert(*outputData)
-	return *response, err
+	response, err := i.convertToUserResponse(user)
+	return response, err
 }
 
-func (i *UserInteractor) Update(ctx context.Context, user *entity.User) (err error) {
+func (i *UserInteractor) Update(ctx context.Context, id string, req UpdateUserRequest) (err error) {
+	user, err := i.Repository.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	setIfNotNil(&user.Name, req.Name)
+	setIfNotNil(&user.Email, req.Email)
+	setIfNotNil(&user.Role, req.Role)
+	user.UpdatedAt = time.Now()
 	err = i.Repository.Update(ctx, user)
 	return err
 }
@@ -100,4 +93,22 @@ func (i *UserInteractor) Update(ctx context.Context, user *entity.User) (err err
 func (i *UserInteractor) Delete(ctx context.Context, userID string) (err error) {
 	err = i.Repository.Delete(ctx, userID)
 	return err
+}
+
+func (i *UserInteractor) convertToUserResponse(user *entity.User) (*UserResponse, error) {
+	outputData := &UserOutputData{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+	return i.OutputPort.Convert(*outputData)
+}
+
+func setIfNotNil[T any](dest *T, src *T) {
+	if src != nil {
+		*dest = *src
+	}
 }
