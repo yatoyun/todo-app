@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import AppRouter from './router';
 
+// FIXME
+// add provider
 const App: React.FC = () => {
     return (
         <AppRouter />
