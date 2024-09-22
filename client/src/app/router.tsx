@@ -1,14 +1,27 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from './routes/index';
-// import Todos from './routes/todos';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
-const AppRouter: React.FC = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            {/*<Route path="/todos" element={<Todos />} />*/}
-        </Routes>
-    );
+// FIXME
+// add query client
+export const createAppRouter = () =>
+    createBrowserRouter([
+        {
+            path: '/',
+            lazy: async () => {
+                const { default: Home } = await import('./routes/index');
+                return {Component: Home};
+            }
+        },
+        {
+            path: '/todos',
+            lazy: async () => {
+                const { default: Todos } = await import('./routes/todos');
+                return {Component: Todos};
+            }
+        }
+    ])
+
+
+export const AppRouter = () => {
+    const router = createAppRouter();
+    return <RouterProvider router={router} />;
 }
-export default AppRouter;
