@@ -73,6 +73,35 @@
     └── 000001_create_todos.up.sql
 ```
 
+# front
+```
+client/g
+├── public/
+│   └── index.html
+├── src/
+│   ├── index.tsx
+│   ├── App.tsx
+│   ├── components/
+│   │   ├── Auth/
+│   │   │   ├── LoginButton.tsx
+│   │   │   └── SignupButton.tsx
+│   │   └── Todo/
+│   │       ├── TodoList.tsx
+│   │       ├── TodoItem.tsx
+│   │       └── TodoForm.tsx
+│   ├── redux/
+│   │   ├── store.ts
+│   │   ├── reducers/
+│   │   │   ├── index.ts
+│   │   │   └── todoReducer.ts
+│   │   └── actions/
+│   │       └── todoActions.ts
+│   └── api/
+│       └── apiClient.ts
+├── package.json
+└── tsconfig.json
+```
+
 ### reference
 https://github.com/arakawamoriyuki/go-clean-handson/blob/main/clean-architecture/readme.md  
 https://github.com/bxcodec/go-clean-arch/blob/master/internal/repository/mysql/article.go  
