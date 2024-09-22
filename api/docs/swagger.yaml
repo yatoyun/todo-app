@@ -28,7 +28,6 @@ definitions:
       user_id:
         type: string
     required:
-    - completed
     - description
     - title
     - user_id
@@ -289,7 +288,11 @@ paths:
           $ref: '#/definitions/usecase.UpdateUserRequest'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: string
       summary: userを更新する
       tags:
       - UpdateUser
