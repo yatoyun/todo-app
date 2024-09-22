@@ -75,31 +75,52 @@
 
 # front
 ```
-client/g
-├── public/
-│   └── index.html
-├── src/
-│   ├── index.tsx
-│   ├── App.tsx
-│   ├── components/
-│   │   ├── Auth/
-│   │   │   ├── LoginButton.tsx
-│   │   │   └── SignupButton.tsx
-│   │   └── Todo/
-│   │       ├── TodoList.tsx
-│   │       ├── TodoItem.tsx
-│   │       └── TodoForm.tsx
-│   ├── redux/
-│   │   ├── store.ts
-│   │   ├── reducers/
-│   │   │   ├── index.ts
-│   │   │   └── todoReducer.ts
-│   │   └── actions/
-│   │       └── todoActions.ts
-│   └── api/
-│       └── apiClient.ts
-├── package.json
-└── tsconfig.json
+src
+|
++-- app
+|   |
+|   +-- routes
+|   |   |
+|   |   +-- index.tsx        # ホームページ（タイトルとログイン/サインアップボタン）
+|   |   +-- todos.tsx        # Todoリストのページ
+|   |
+|   +-- app.tsx              # メインアプリケーションコンポーネント
+|   +-- provider.tsx         # グローバルプロバイダ（Redux、Auth0など）
+|   +-- router.tsx           # ルーティング設定
+|
++-- assets                   # 画像やフォントなどの静的ファイル
+|
++-- components               # 共通コンポーネント（ボタン、ヘッダーなど）
+|
++-- config
+|   |
+|   +-- auth0.ts             # Auth0の設定ファイル
+|
++-- features
+|   |
+|   +-- auth
+|   |   +-- authSlice.ts     # 認証用のReduxスライス
+|   |
+|   +-- todos
+|       +-- todosSlice.ts    # Todo用のReduxスライス
+|
++-- hooks
+|   |
+|   +-- useAuth.ts           # 認証状態を取得するカスタムフック
+|   +-- useTodos.ts          # Todoリストを取得するカスタムフック
+|
++-- lib
+|   |
+|   +-- apiClient.ts         # APIクライアントの設定（openapi-typescriptで生成）
+|
++-- stores
+|   |
+|   +-- index.ts             # Reduxストアの設定
+|
++-- types                    # 型定義ファイル
+|
++-- utils                    # ユーティリティ関数
+
 ```
 
 ### reference
