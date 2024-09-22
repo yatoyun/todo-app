@@ -4,9 +4,7 @@ import AppRouter from './router';
 
 const App: React.FC = () => {
     return (
-        <Router>
         <AppRouter />
-        </Router>
     );
 }
 
