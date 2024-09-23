@@ -13,12 +13,23 @@ export const createAppRouter = (queryClient: QueryClient) =>
         {
             path: '/todos',
             lazy: async () => {
-                const { TodosRoute } = await import('./routes/todos');
+                const { TodosRoute } = await import('./routes/todos/todos');
                 return {Component: TodosRoute};
             },
             loader: async (args: LoaderFunctionArgs) => {
-                const { TodosLoader } = await import('./routes/todos');
+                const { TodosLoader } = await import('./routes/todos/todos');
                 return TodosLoader(queryClient)(args);
+            }
+        },
+        {
+            path: '/todos/:todoId',
+            lazy: async () => {
+                const { TodoRoute } = await import('./routes/todos/todo');
+                return {Component: TodoRoute};
+            },
+            loader: async (args: LoaderFunctionArgs) => {
+                const { TodoLoader } = await import('./routes/todos/todo');
+                return TodoLoader(queryClient)(args);
             }
         }
     ])
