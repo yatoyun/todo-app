@@ -13,12 +13,12 @@ type UserOutputData struct {
 }
 
 type UserResponse struct {
-	ID        string
-	Name      string
-	Email     string
-	Role      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Role      string    `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type UserOutputPortInterface interface {

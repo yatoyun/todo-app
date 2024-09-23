@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: Recommend Swaggo API
+  description: This is a recommend_swaggo server
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+servers:
+- url: //localhost:9090/api/v1
+paths:
+  /todos:
+    get:
+      tags:
+      - GetTodos
+      summary: todo一覧を取得
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/usecase.TodoResponse'
+    post:
+      tags:
+      - CreateTodo
+      summary: todoを作成
+      requestBody:
+        description: Todo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usecase.CreateTodoRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usecase.TodoResponse'
+      x-codegen-request-body-name: request
+  /todos/{id}:
+    get:
+      tags:
+      - GetTodoByID
+      summary: todoを取得
+      parameters:
+      - name: id
+        in: path
+        description: Todo ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entity.Todo'
+    put:
+      tags:
+      - UpdateTodo
+      summary: todoを更新
+      parameters:
+      - name: id
+        in: path
+        description: Todo ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Todo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usecase.UpdateTodoRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usecase.TodoResponse'
+      x-codegen-request-body-name: request
+    delete:
+      tags:
+      - DeleteTodo
+      summary: todoを削除
+      parameters:
+      - name: id
+        in: path
+        description: Todo ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+          content: {}
+  /users:
+    get:
+      tags:
+      - GetUsers
+      summary: user一覧を取得する
+      description: user一覧を取得する
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/usecase.UserResponse'
+    post:
+      tags:
+      - CreateUser
+      summary: userを作成する
+      description: userを作成する
+      requestBody:
+        description: user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usecase.CreateUserRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usecase.UserResponse'
+      x-codegen-request-body-name: user
+  /users/{id}:
+    get:
+      tags:
+      - GetUserByID
+      summary: userをIDで取得する
+      description: userをIDで取得する
+      parameters:
+      - name: id
+        in: path
+        description: ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usecase.UserResponse'
+    put:
+      tags:
+      - UpdateUser
+      summary: userを更新する
+      description: userを更新する
+      parameters:
+      - name: id
+        in: path
+        description: ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usecase.UpdateUserRequest'
+        required: true
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: string
+      x-codegen-request-body-name: user
+    delete:
+      tags:
+      - DeleteUser
+      summary: userを削除する
+      description: userを削除する
+      parameters:
+      - name: id
+        in: path
+        description: ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User deleted successfully
+          content:
+            '*/*':
+              schema:
+                type: string
+  /users/auth0/{auth0_id}:
+    get:
+      tags:
+      - GetUserByAuth0ID
+      summary: userをAuth0IDで取得する
+      description: userをAuth0IDで取得する
+      parameters:
+      - name: auth0_id
+        in: path
+        description: Auth0ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usecase.UserResponse'
+components:
+  schemas:
+    entity.Todo:
+      type: object
+      properties:
+        completed:
+          type: boolean
+        created_at:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        updated_at:
+          type: string
+        user_id:
+          type: string
+    usecase.CreateTodoRequest:
+      required:
+      - description
+      - title
+      - user_id
+      type: object
+      properties:
+        completed:
+          type: boolean
+        description:
+          type: string
+        title:
+          type: string
+        user_id:
+          type: string
+    usecase.CreateUserRequest:
+      required:
+      - auth0_id
+      - email
+      - name
+      - role
+      type: object
+      properties:
+        auth0_id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+          - admin
+          - user
+    usecase.TodoResponse:
+      type: object
+      properties:
+        completed:
+          type: boolean
+        createdAt:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        updatedAt:
+          type: string
+    usecase.UpdateTodoRequest:
+      type: object
+      properties:
+        completed:
+          type: boolean
+        description:
+          type: string
+        title:
+          type: string
+    usecase.UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+    usecase.UserResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        updatedAt:
+          type: string
+x-original-swagger-version: "2.0"
