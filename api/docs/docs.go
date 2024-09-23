@@ -300,7 +300,14 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "userを削除する",
@@ -358,7 +365,6 @@ const docTemplate = `{
         "usecase.CreateTodoRequest": {
             "type": "object",
             "required": [
-                "completed",
                 "description",
                 "title",
                 "user_id"
