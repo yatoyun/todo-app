@@ -4,6 +4,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"github.com/yatoyun/todo-app/api/config"
+	"github.com/yatoyun/todo-app/api/infrastructure/middleware"
 	"github.com/yatoyun/todo-app/api/infrastructure/router/api"
 	"log"
 )
@@ -15,6 +17,7 @@ type Route struct {
 }
 
 func NewRouter(conn *sqlx.DB) *gin.Engine {
+	cfg := config.LoadConfig()
 	todoController := api.InitializeTodoController(conn)
 	userController := api.InitializeUserController(conn)
 
@@ -26,7 +29,9 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+	authMiddleware := middleware.JWTMiddleware(cfg)
 	apiGroup := r.Group("/api/v1")
+	apiGroup.Use(authMiddleware)
 	{
 		todosGroup := apiGroup.Group("/todos")
 		{
