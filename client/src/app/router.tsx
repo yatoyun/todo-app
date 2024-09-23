@@ -1,8 +1,7 @@
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { createBrowserRouter, RouterProvider, LoaderFunctionArgs } from 'react-router-dom';
 
-// FIXME
-// add query client
-export const createAppRouter = () =>
+export const createAppRouter = (queryClient: QueryClient) =>
     createBrowserRouter([
         {
             path: '/',
@@ -14,14 +13,19 @@ export const createAppRouter = () =>
         {
             path: '/todos',
             lazy: async () => {
-                const { default: Todos } = await import('./routes/todos');
-                return {Component: Todos};
+                const { TodosRoute } = await import('./routes/todos');
+                return {Component: TodosRoute};
+            },
+            loader: async (args: LoaderFunctionArgs) => {
+                const { TodosLoader } = await import('./routes/todos');
+                return TodosLoader(queryClient)(args);
             }
         }
     ])
 
 
 export const AppRouter = () => {
-    const router = createAppRouter();
+    const queryClient = useQueryClient();
+    const router = createAppRouter(queryClient);
     return <RouterProvider router={router} />;
 }
