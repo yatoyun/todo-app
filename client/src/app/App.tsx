@@ -1,12 +1,21 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRouter from './router';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {AppRouter} from './router';
+import { queryConfig } from '../lib/react-query';
 
+// FIXME
+// add provider
 const App: React.FC = () => {
+    const [queryClient] = React.useState(
+        () =>
+          new QueryClient({
+            defaultOptions: queryConfig,
+          }),
+      );
     return (
-        <Router>
-        <AppRouter />
-        </Router>
+        <QueryClientProvider client={queryClient}>
+            <AppRouter />
+        </QueryClientProvider>
     );
 }
 

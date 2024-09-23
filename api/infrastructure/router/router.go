@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/yatoyun/todo-app/api/infrastructure/router/api"
@@ -18,6 +19,13 @@ func NewRouter(conn *sqlx.DB) *gin.Engine {
 	userController := api.InitializeUserController(conn)
 
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	apiGroup := r.Group("/api/v1")
 	{
 		todosGroup := apiGroup.Group("/todos")

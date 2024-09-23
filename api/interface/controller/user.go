@@ -113,6 +113,7 @@ func (uc *UserController) GetUserByAuth0ID(c *gin.Context) {
 // @Produce json
 // @Param id path string true "ID"
 // @Param user body usecase.UpdateUserRequest true "user"
+// @Success 200 {string} string "User updated successfully"
 // @Router /users/{id} [put]
 func (uc *UserController) UpdateUser(c *gin.Context) {
 	var user usecase.UpdateUserRequest
