@@ -55,7 +55,7 @@ definitions:
     properties:
       completed:
         type: boolean
-      createdAt:
+      created_at:
         type: string
       description:
         type: string
@@ -63,7 +63,7 @@ definitions:
         type: string
       title:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
   usecase.UpdateTodoRequest:
@@ -86,7 +86,7 @@ definitions:
     type: object
   usecase.UserResponse:
     properties:
-      createdAt:
+      created_at:
         type: string
       email:
         type: string
@@ -96,7 +96,7 @@ definitions:
         type: string
       role:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
 host: localhost:9090

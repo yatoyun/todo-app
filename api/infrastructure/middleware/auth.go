@@ -1,30 +1,31 @@
 package middleware
 
 import (
-	"context"
 	"log"
+	"log/slog"
 	"net/http"
+	"net/url"
 	"time"
 
-	"github.com/auth0/go-jwt-middleware/v2"
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/yatoyun/todo-app/api/config"
 )
 
 func JWTMiddleware(cfg *config.Config) gin.HandlerFunc {
-	keyFunc := func(ctx context.Context) (interface{}, error) {
-		// Auth0の公開鍵を取得するための設定が必要です。
-		// ここでは簡略化のため、署名キーを直接返していますが、
-		// 実際にはAuth0のJWKエンドポイントからキーを取得する必要があります。
-		// 例えば、https://YOUR_AUTH0_DOMAIN/.well-known/jwks.json
-		return []byte("YOUR_AUTH0_SECRET"), nil
+	issuerURL, err := url.Parse("https://" + cfg.Auth0Domain + "/")
+	if err != nil {
+		log.Fatalf("Failed to parse the issuer url: %v", err)
 	}
 
+	provider := jwks.NewCachingProvider(issuerURL, 5*time.Minute)
+
 	jwtValidator, err := validator.New(
-		keyFunc,
+		provider.KeyFunc,
 		validator.RS256,
-		cfg.Auth0Domain,
+		issuerURL.String(),
 		[]string{cfg.Auth0Audience},
 		validator.WithAllowedClockSkew(30*time.Second),
 	)
@@ -33,6 +34,7 @@ func JWTMiddleware(cfg *config.Config) gin.HandlerFunc {
 	}
 
 	errorHandler := func(w http.ResponseWriter, r *http.Request, err error) {
+		slog.Error("request header: %v", r.Header)
 		log.Printf("JWT検証エラー: %v", err)
 	}
 

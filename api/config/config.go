@@ -19,11 +19,10 @@ func LoadConfig() *Config {
 		Auth0Audience:     getEnv("AUTH0_AUDIENCE", ""),
 		Auth0ClientID:     getEnv("AUTH0_CLIENT_ID", ""),
 		Auth0ClientSecret: getEnv("AUTH0_CLIENT_SECRET", ""),
-		DatabaseURL:       getEnv("DATABASE_URL", ""),
 	}
 
 	// 必須の環境変数が設定されているか確認
-	if cfg.Auth0Domain == "" || cfg.Auth0Audience == "" || cfg.DatabaseURL == "" {
+	if cfg.Auth0Domain == "" || cfg.Auth0Audience == "" {
 		log.Fatal("必須の環境変数が設定されていません")
 	}
 

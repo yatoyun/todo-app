@@ -417,7 +417,7 @@ const docTemplate = `{
                 "completed": {
                     "type": "boolean"
                 },
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "description": {
@@ -429,7 +429,7 @@ const docTemplate = `{
                 "title": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -465,7 +465,7 @@ const docTemplate = `{
         "usecase.UserResponse": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "email": {
@@ -480,7 +480,7 @@ const docTemplate = `{
                 "role": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 }
             }
