@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/react-query';
 import { LoaderFunctionArgs } from 'react-router-dom';
 
-import { getTodosQueryOptions } from '../../../features/todos/api/get-todos';
-import { TodoList } from '../../../features/todos/components/todos-list';
+import { getTodosQueryOptions } from '../../../../features/todos/api/get-todos';
+import { TodoList } from '../../../../features/todos/components/todos-list';
 
 export const TodosLoader = (queryClient: QueryClient) =>
     async ({ request }: LoaderFunctionArgs) => {
